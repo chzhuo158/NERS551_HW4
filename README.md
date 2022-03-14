@@ -4,7 +4,7 @@
 ```
 python ./direct.py
 ```
-solve the PKE analytically. The output is PEK_sol_dir.out.
+solve the PKE analytically. The output is PKE_dir.out.
 
 # Question B
 ```
@@ -26,4 +26,4 @@ compare the numerical results with the analytical results, the figure is saved i
 ```
 python ./solvePKE_six.py
 ```
-solve the PKE with six group delay netron, the output is PKE_sol_six.out.
+solve the PKE with six group delay netron, the output is PKE_sol_mg.out.
