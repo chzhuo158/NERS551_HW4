@@ -47,7 +47,7 @@ rhon = []
 zetan = []
 
 def h(x):
-    return -x-np.log(1-x)
+   return -x-np.log(1-x)
 
 # output_file = "PKE_direct" + "_dt_" +str("{:.1e}".format(dt)) + "_Lambda_" +str("{:.1e}".format(LAMBD)) + ".out" 
 output_file = "PKE_direct.out"
@@ -59,28 +59,28 @@ for i in range(int(n)):
       t = i/1000
       rho_im = 0.5*beta_eff*t
       rho_drv = 0.5*beta_eff
-      a = 0.5*beta_eff
       A = (P0)/(beta_eff-rho_im)
       B = (lambd*beta_eff)/rho_drv * h( (rho_drv*t) /beta_eff )
       p = A*np.exp(B)
    else:
       t = i/1000
-      rho_im = 0.5*beta_eff-0.1*beta_eff*(t-1)
-      a = 0.5*beta_eff
-      rho_drv = -0.1*beta_eff
-      ka = ( (0.5+0.1) / 0.5)*t1 - (0.1/0.5)*t
-      A = (P0*np.exp(B))/(beta_eff- rho_im )
-      B = ( lambd*beta_eff/a) * ( h(a*t1/beta_eff) )
-      C = (-lambd*beta_eff/a) * ( h(a*ka/beta_eff) )
+      rho_im = 0.5*beta_eff-0.1*beta_eff*(t-t1)
+      a = 0.5*beta_eff # the slope before t1
+      rho_drv = -0.1*beta_eff # the slope after t1
+      ka = ( (0.5+0.1) / 0.5)*t1 - (0.1/0.5)*t # a change of variable for easier integration
+      B_old = (lambd*beta_eff)/(a) * h( (a*t1) /beta_eff )
+      A = (P0*np.exp(B_old))/(beta_eff- rho_im )
+      B = ( lambd/0.1) * ( h(-a*t1/beta_eff) )
+      C = (-lambd/0.1) * ( h(- (0.6*t1-0.1*t) ) ) 
       p = A*np.exp(B+C) 
 
    pn.append(p)
 
-   rho = 1
-   rhon.append(rho)
+   # rho = 1
+   # rhon.append(rho)
 
-   zeta = 1
-   zetan.append(zeta)
+   # zeta = 1
+   # zetan.append(zeta)
 
    fout.write("%12f  %12f  %12f %12f \n" % (rho, p, zeta, i/1000) )
 

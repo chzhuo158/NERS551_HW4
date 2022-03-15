@@ -23,7 +23,8 @@ t = np.loadtxt(input_file_numerical)[:, 3]
 
 # show the two figures
 fig, axs = plt.subplots(1, 1)
-axs.plot(t, p_dir, t, p_num, t, p_six)
+axs.plot(t, p_dir, t, p_num)
+# axs.plot(t, p_dir, t, p_num, t, p_six)
 axs.set_xlim(0, 6)
 axs.set_xlabel('time')
 axs.legend([ 'Analytical','Numerical(1-group)','Numerical (6-group)'])
