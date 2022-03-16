@@ -9,6 +9,7 @@ import numpy as np
 t_max = 6
 dt = 1.0E-3
 dt_prev = 1.0E-3
+t1 = 1 #s
 n = t_max/dt
 
 LAMBD = 2.6E-15
@@ -71,10 +72,10 @@ for i in range(int(n)):
     # step 0 -- set the reactivity curve
     t = i/1000
     if i<=1000:
-        rho_im = 0.5*t
+        rho_im = (0.5*t)*beta_eff
     else:
         # rho_im = 0.5*beta_eff-0.5*beta_eff*(i-1000)/5000
-        rho_im = 0.5-0.1*(t-1)
+        rho_im = (0.5-0.1*(t-t1))*beta_eff
 
     # step 1 -- Determine transformation parameter with eq. (23)
     #        -- Prepare xx and xx with eq. (15),(16) and (17),
@@ -82,12 +83,13 @@ for i in range(int(n)):
     alpha = 1.0/dt_prev*np.log(p_prev/p_pprev)
     for k in range(6):
         lambd_tilda[k] = (lambd[k]+alpha)*dt
-        OMEGA[k] = LAMBD0/LAMBD*beta[k]*dt*k1(lambd_tilda[k])
+        OMEGA[k] = LAMBD0/LAMBD*beta[k]*dt*k1(lambd_tilda[k]) # Eq. 15
         G_prev[k] = LAMBD0/LAMBD_prev*beta_eff_prev[k]*p_prev
         zeta_hat[k] = np.exp(-lambd[k]*dt)*zeta_prev[k] \
-                    + np.exp(alpha*dt)*dt*G_prev[k]*(k0(lambd_tilda[k])-k1(lambd_tilda[k]))
+                    + np.exp(alpha*dt)*dt*G_prev[k]*(k0(lambd_tilda[k])-k1(lambd_tilda[k])) # Eq. 16
 
     # step 2 -- Prepare xx, xx and xx with eq. (18),(19)
+    # beta_eff= np.dot(lambd,beta ) /sum (lambd)          
     tau     = np.dot(lambd,OMEGA)           #lambd*OMEGA
     Sd_hat  = np.dot(lambd,zeta_hat)        #lambd*zeta_hat
     Sd_prev = np.dot(lambd_prev,zeta_prev)  #lambd_prev*zeta_prev
