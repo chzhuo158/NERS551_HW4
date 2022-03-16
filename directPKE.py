@@ -60,15 +60,14 @@ for i in range(int(n)):
       rho_im = 0.5*beta_eff*t
       rho_drv = 0.5*beta_eff
       A = (P0)/(beta_eff-rho_im)
-      B = (lambd*beta_eff)/rho_drv * h( (rho_drv*t) /beta_eff )
+      B = (lambd*beta_eff)/rho_drv * h( -(rho_drv*t) /beta_eff )
       p = A*np.exp(B)
    else:
       t = i/1000
       rho_im = 0.5*beta_eff-0.1*beta_eff*(t-t1)
       a = 0.5*beta_eff # the slope before t1
       rho_drv = -0.1*beta_eff # the slope after t1
-      ka = ( (0.5+0.1) / 0.5)*t1 - (0.1/0.5)*t # a change of variable for easier integration
-      B_old = (lambd*beta_eff)/(a) * h( (a*t1) /beta_eff )
+      B_old = (lambd*beta_eff)/(a) * h( -(a*t1) /beta_eff )
       A = (P0*np.exp(B_old))/(beta_eff- rho_im )
       B = ( lambd/0.1) * ( h(-a*t1/beta_eff) )
       C = (-lambd/0.1) * ( h(- (0.6*t1-0.1*t) ) ) 
