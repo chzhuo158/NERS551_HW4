@@ -18,8 +18,14 @@ if sys.version_info[0] < 3:
 
 # Parameters
 
-reactivity_inputfile='symmetric_ramp_data_gen.txt'
-# reactivity_inputfile='symmetric_ramp_data.txt'
+# reactivity_inputfile='symmetric_ramp_data_gen.txt'
+# reactivity_inputfile='symmetric_ramp_data_1e-0.txt'
+# reactivity_inputfile='symmetric_ramp_data_1e-1.txt'
+# reactivity_inputfile='symmetric_ramp_data_1e-2.txt'
+# reactivity_inputfile='symmetric_ramp_data_1e-3.txt'
+# reactivity_inputfile='symmetric_ramp_data_1e-4.txt'
+# reactivity_inputfile='symmetric_ramp_data_1e-5.txt'
+reactivity_inputfile='symmetric_ramp_data.txt'
 
 P_0 = 1.0               # Initial power
 
@@ -27,17 +33,17 @@ P_0 = 1.0               # Initial power
 
 ## one-group parameters
 
-Lambdas=[0.49405] # Group decay constants (1/s)
+# Lambdas=[0.49405] # Group decay constants (1/s)
 
-Betas = [0.0076]     # Delayed neutron fractions
+# Betas = [0.0076]     # Delayed neutron fractions
 
 
 
 ## six-group parameters
 
-# Lambdas=[0.0128,0.0318,0.119,0.3181,1.4027,3.9286]
+Lambdas=[0.0128,0.0318,0.119,0.3181,1.4027,3.9286]
 
-# Betas=[0.0002584,0.00152,0.0013908,0.0030704,0.001102,0.0002584]
+Betas=[0.0002584,0.00152,0.0013908,0.0030704,0.001102,0.0002584]
 
 
 
@@ -51,7 +57,7 @@ for i in range(len(Betas)):
 
 
 
-LAMBDA_0 = 2.6E-15      # Neutron lifetime (s)
+LAMBDA_0 = 2.6E-5      # Neutron lifetime (s)
 
 lambd = 0.49405
 
@@ -583,6 +589,9 @@ plt.ylabel('Reactivity ($)')
 
 plt.title('Reactivity Insertion vs Time')
 
+figure_file_name = "./figures/PKE_sol_rho" + "_Lambda" + str(  np.format_float_scientific(LAMBDA_0, precision = 2, exp_digits=2)  ) +".png"
+reactivity_plot.savefig(figure_file_name)
+
 
 
 # plot power
@@ -601,6 +610,21 @@ plt.title('Power vs Time')
 
 plt.legend()
 
+plt.grid()
+
+figure_file_name = "./figures/PKE_sol_p" + "_Lambda" + str(  np.format_float_scientific(LAMBDA_0, precision = 2, exp_digits=2)  ) +".png"
+power_plot.savefig(figure_file_name)
+
+max_analytical = max(result_analytical)
+max_numerical =   max(P)
+rel_diff =  abs(max_analytical - max_numerical)/max_analytical
+print( rel_diff )
+
+# output_file = "PKE_sol" + "_dt_" +str("{:.1e}".format(dt)) + "_Lambda_" +str("{:.1e}".format(LAMBD)) + ".out" 
+output_file = "PKE_Q3_a.out"
+fout = open(output_file,'a+')
+fout.write("%.8E \n\n" % (rel_diff))
+
 
 
 # plot precursor concentration
@@ -617,9 +641,32 @@ plt.ylabel('Precursor concentration')
 
 plt.title('Precursor concentration vs Time')
 
+figure_file_name = "./figures/PKE_sol_zeta" + "_Lambda" + str(  np.format_float_scientific(LAMBDA_0, precision = 2, exp_digits=2)  ) +".png"
+precursor_plot.savefig(figure_file_name)
 
+# # combined plot
+# combined_plot = plt.figure(3)
+# fig, axs= plt.subplots(3, 1, sharex=True)
+# axs[0].set_title('PKE results')
+# axs[0].plot(t, rho)
+# axs[0].grid(True)
+# # axs[0].set_xlabel('time (s)')
+# axs[0].set_ylabel('reactivity')
+
+# axs[1].plot(t, P)
+# axs[1].grid(True)
+# # axs[1].set_xlabel('time (s)')
+# axs[1].set_ylabel('power')
+
+# for k in range(groups):
+#     axs[2].plot(t, zeta[:,k], label='group '+str(k+1))
+# axs[2].grid(True)
+# axs[2].set_xlabel('time (s)')
+# axs[2].set_ylabel('precursor concentration')
+# figure_file_name = "./figures/PKE_sol_combined" + "_Lambda" + str(  np.format_float_scientific(LAMBDA_0, precision = 2, exp_digits=2)  ) +".png"
+# fig.savefig(figure_file_name)
 
 plt.legend()
 
-plt.show()
+# plt.show()
 
